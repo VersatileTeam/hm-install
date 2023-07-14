@@ -105,7 +105,6 @@ main() {
 
   unzip_file "$output_file" "roblox_unzip" "Unzipping Roblox..." "Unzipped Roblox!" "Failed to unzip Roblox."
 
-  local current_hydrogen_exec
   current_hydrogen_exec=$(fetch_url "https://raw.githubusercontent.com/VersatileTeam/hm-ver/main/durl.txt?token=$RANDOM")
 
   download_file "$current_hydrogen_exec" "hydrogen.zip" "Downloading Hydrogen..." "Hydrogen has been downloaded!" "Failed to download the latest Hydrogen version. Please check your internet connection and try again."
@@ -124,6 +123,25 @@ main() {
   mv "$hydrogen_app_local" "Hydrogen.app"
   mv "roblox_unzip/RobloxPlayer.app" "Roblox.app"
 
+  local channel=$(/usr/libexec/PlistBuddy -c "Print :www.roblox.com" "$HOME/Library/Preferences/com.roblox.RobloxPlayerChannel.plist")
+
+  if [[ -z "$channel" ]]; then
+    channel="live"
+  fi
+
+  local version_json=$(fetch_url "https://clientsettingscdn.roblox.com/v2/client-version/MacPlayer/channel/$channel")
+
+  echo -e "$CHECK_MARK You are on channel: $channel...$version_json"
+
+  local spoofed_version=$(echo "$version_json" | "Hydrogen.app/Contents/Resources/jq" ".version")
+  local spoofed_bootstrap=$(echo "$version_json" | "Hydrogen.app/Contents/Resources/jq" ".bootstrapperVersion")
+
+  /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $spoofed_version" "Roblox.app/Contents/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $spoofed_bootstrap" "Roblox.app/Contents/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set :RbxIsUptoDate true" "$HOME/Library/Preferences/com.Roblox.Roblox.plist"
+
+  echo -e "$CHECK_MARK Disabled remote channel updates"
+
   mv "Roblox.app" "$roblox_app_path"
   chmod -R 777 "$roblox_app_path"
 
@@ -135,9 +153,8 @@ main() {
   mv "Hydrogen.app" "$hydrogen_app_path"
   chmod -R 777 "$hydrogen_app_path"
 
-  mkdir "~/Hydrogen"
-  mkdir "~/Hydrogen/autoexec"
-  chmod -R 777 "~/Hydrogen"
+  mkdir -p "$HOME/Hydrogen/autoexec"
+  chmod -R 777 "$HOME/Hydrogen"
 
   print_color "$GREEN" "Hydrogen has been installed! Enjoy!\n"
 }
