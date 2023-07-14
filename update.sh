@@ -2,10 +2,10 @@
 set -e
 
 # Constants
-readonly RED='\e[31m'
-readonly GREEN='\e[32m'
-readonly WHITE='\e[97m'
-readonly RESET='\e[0m'
+readonly RED=$(tput setaf 1)
+readonly GREEN=$(tput setaf 2)
+readonly WHITE=$(tput setaf 7)
+readonly RESET=$(tput sgr0)
 readonly CHECK_MARK="\033[0;32m\xE2\x9C\x94\033[0m"
 readonly X_MARK="\033[0;31m\xE2\x9C\x98\033[0m"
 
@@ -16,14 +16,15 @@ readonly EXIT_VERSION_FETCH_FAILED=3
 print_color() {
   local color=$1
   local message=$2
-  echo -ne "${color}${message}${RESET}"
+  echo -e "${color}${message}${RESET}"
 }
 
 overwrite_color() {
   local color=$1
   local message=$2
-  local spaces=$(printf '%*s' "$COLUMNS")
-  echo -ne "\\r${color}${message}${spaces}${RESET}"
+  tput cr
+  tput el
+  echo -ne "${color}${message}${RESET}"
 }
 
 ensure_command_exists() {
@@ -127,7 +128,7 @@ main() {
   "Hydrogen.app/Contents/Resources/insert_dylib" --strip-codesig --all-yes "Roblox.app/Contents/MacOS/libHydrogen.dylib" "Roblox.app/Contents/MacOS/.RobloxPlayer" "Roblox.app/Contents/MacOS/RobloxPlayer"
 
   mkdir -p "~/Hydrogen/autoexec"
-  chmod -R 777 "/Users/Shared/Hydrogen"
+  chmod -R 777 "~/Hydrogen"
 
   mv "Roblox.app" "$roblox_app_path"
   chmod -R 777 "$roblox_app_path"
