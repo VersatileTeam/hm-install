@@ -24,7 +24,7 @@ overwrite_color() {
   local message=$2
   tput cr
   tput el
-  echo -e "${color}${message}${RESET}\n"
+  echo -e "${color}${message}${RESET}"
 }
 
 ensure_command_exists() {
@@ -96,7 +96,7 @@ main() {
   local current_version
   current_version=$(fetch_url "http://setup.roblox.com/mac/version")
 
-  print_color "$GREEN" "$CHECK_MARK Got latest version of Roblox! $current_version"
+  print_color "$GREEN" "$CHECK_MARK Got latest version of Roblox! $current_version\n"
 
   local download_url="http://setup.rbxcdn.com/mac/$current_version-RobloxPlayer.zip"
   local output_file="$current_version-RobloxPlayer.zip"
@@ -124,19 +124,20 @@ main() {
   mv "$hydrogen_app_local" "Hydrogen.app"
   mv "roblox_unzip/RobloxPlayer.app" "Roblox.app"
 
-  cp "Hydrogen.app/Contents/Resources/libHydrogen.dylib" "Roblox.app/Contents/MacOS/libHydrogen.dylib"
-  cp "Roblox.app/Contents/MacOS/RobloxPlayer" "Roblox.app/Contents/MacOS/.RobloxPlayer"
-
-  "Hydrogen.app/Contents/Resources/insert_dylib" --strip-codesig --all-yes "Roblox.app/Contents/MacOS/libHydrogen.dylib" "Roblox.app/Contents/MacOS/.RobloxPlayer" "Roblox.app/Contents/MacOS/RobloxPlayer" >/dev/null 2>&1
-
-  mkdir -p "~/Hydrogen/autoexec"
-  chmod -R 777 "~/Hydrogen"
-
   mv "Roblox.app" "$roblox_app_path"
   chmod -R 777 "$roblox_app_path"
 
+  cp "Hydrogen.app/Contents/Resources/libHydrogen.dylib" "/Applications/Roblox.app/Contents/MacOS/libHydrogen.dylib"
+  cp "/Applications/Roblox.app/Contents/MacOS/RobloxPlayer" "/Applications/Roblox.app/Contents/MacOS/.RobloxPlayer"
+
+  "Hydrogen.app/Contents/Resources/insert_dylib" --strip-codesig --all-yes "/Applications/Roblox.app/Contents/MacOS/libHydrogen.dylib" "/Applications/Roblox.app/Contents/MacOS/.RobloxPlayer" "/Applications/Roblox.app/Contents/MacOS/RobloxPlayer" >/dev/null 2>&1
+
   mv "Hydrogen.app" "$hydrogen_app_path"
   chmod -R 777 "$hydrogen_app_path"
+
+  mkdir "~/Hydrogen"
+  mkdir "~/Hydrogen/autoexec"
+  chmod -R 777 "~/Hydrogen"
 
   print_color "$GREEN" "Hydrogen has been installed! Enjoy!\n"
 }
