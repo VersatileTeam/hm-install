@@ -125,7 +125,7 @@ main() {
   cp "Hydrogen.app/Contents/Resources/libHydrogen.dylib" "Roblox.app/Contents/MacOS/libHydrogen.dylib"
   cp "Roblox.app/Contents/MacOS/RobloxPlayer" "Roblox.app/Contents/MacOS/.RobloxPlayer"
 
-  "Hydrogen.app/Contents/Resources/insert_dylib" --strip-codesig --all-yes "Roblox.app/Contents/MacOS/libHydrogen.dylib" "Roblox.app/Contents/MacOS/.RobloxPlayer" "Roblox.app/Contents/MacOS/RobloxPlayer"
+  "Hydrogen.app/Contents/Resources/insert_dylib" --strip-codesig --all-yes "Roblox.app/Contents/MacOS/libHydrogen.dylib" "Roblox.app/Contents/MacOS/.RobloxPlayer" "Roblox.app/Contents/MacOS/RobloxPlayer" &>/dev/null
 
   mkdir -p "~/Hydrogen/autoexec"
   chmod -R 777 "~/Hydrogen"
