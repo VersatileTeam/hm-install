@@ -16,7 +16,7 @@ readonly EXIT_VERSION_FETCH_FAILED=3
 print_color() {
   local color=$1
   local message=$2
-  echo -e "${color}${message}${RESET}"
+  echo -ne "${color}${message}${RESET}"
 }
 
 overwrite_color() {
@@ -24,7 +24,7 @@ overwrite_color() {
   local message=$2
   tput cr
   tput el
-  echo -ne "${color}${message}${RESET}"
+  echo -e "${color}${message}${RESET}\n"
 }
 
 ensure_command_exists() {
@@ -88,13 +88,15 @@ cleanup() {
 main() {
   trap cleanup EXIT
 
+  if [ "$(id -u)" -eq 0 ]; then print_color "$RED" "$X_MARK Please do not run as root!" >&2; exit 1; fi
+
   ensure_command_exists "curl" "Curl could not be found! This should never happen. Open a ticket."
   ensure_command_exists "unzip" "Unzip could not be found! This should never happen. Open a ticket."
 
   local current_version
   current_version=$(fetch_url "http://setup.roblox.com/mac/version")
 
-  print_color "$GREEN" "$CHECK_MARK Got latest version of Roblox! $current_version\n"
+  print_color "$GREEN" "$CHECK_MARK Got latest version of Roblox! $current_version"
 
   local download_url="http://setup.rbxcdn.com/mac/$current_version-RobloxPlayer.zip"
   local output_file="$current_version-RobloxPlayer.zip"
