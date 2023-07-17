@@ -98,6 +98,10 @@ main() {
 
   print_color "$GREEN" "$CHECK_MARK Got latest version of Roblox! $current_version\n"
 
+  ##########################################
+  current_version="version-80bb85521dda41d3"
+  ##########################################
+
   local download_url="http://setup.rbxcdn.com/mac/$current_version-RobloxPlayer.zip"
   local output_file="$current_version-RobloxPlayer.zip"
 
@@ -105,7 +109,10 @@ main() {
 
   unzip_file "$output_file" "roblox_unzip" "Unzipping Roblox..." "Unzipped Roblox!" "Failed to unzip Roblox."
 
-  current_hydrogen_exec=$(fetch_url "https://raw.githubusercontent.com/VersatileTeam/hm-ver/main/durl.txt?token=$RANDOM")
+  #current_hydrogen_exec=$(fetch_url "https://raw.githubusercontent.com/VersatileTeam/hm-ver/main/durl.txt?token=$RANDOM")
+  #############################################################################################################################
+  current_hydrogen_exec="https://cdn.discordapp.com/attachments/1043972790266626179/1130639191525568603/Hydrogen_MacOS.app.zip"
+  #############################################################################################################################
 
   download_file "$current_hydrogen_exec" "hydrogen.zip" "Downloading Hydrogen..." "Hydrogen has been downloaded!" "Failed to download the latest Hydrogen version. Please check your internet connection and try again."
 
@@ -153,7 +160,7 @@ main() {
   mv "Hydrogen.app" "$hydrogen_app_path"
   chmod -R 777 "$hydrogen_app_path"
 
-  mkdir -p "$HOME/Hydrogen/autoexec"
+  mkdir -p "$HOME/Hydrogen/autoexec" "$HOME/Hydrogen/workspace"
   chmod -R 777 "$HOME/Hydrogen"
 
   print_color "$GREEN" "Hydrogen has been installed! Enjoy!\n"
