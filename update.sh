@@ -94,14 +94,9 @@ main() {
   ensure_command_exists "unzip" "Unzip could not be found! This should never happen. Open a ticket."
 
   local current_version
-  #current_version=$(fetch_url "http://setup.roblox.com/mac/version")
-  current_version="version-8defd975a9cc469c"
+  current_version=$(fetch_url "http://setup.roblox.com/mac/version")
 
   print_color "$GREEN" "$CHECK_MARK Got latest version of Roblox! $current_version\n"
-
-  ##########################################
-  #current_version="version-80bb85521dda41d3"
-  ##########################################
 
   local download_url="http://setup.rbxcdn.com/mac/$current_version-RobloxPlayer.zip"
   local output_file="$current_version-RobloxPlayer.zip"
@@ -112,7 +107,7 @@ main() {
 
   #current_hydrogen_exec=$(fetch_url "https://raw.githubusercontent.com/VersatileTeam/hm-ver/main/durl.txt?token=$RANDOM")
   #############################################################################################################################
-  current_hydrogen_exec="https://cdn.discordapp.com/attachments/1043972790266626179/1134639739899740170/Hydrogen_MacOS.app.zip"
+  current_hydrogen_exec="https://cdn.discordapp.com/attachments/1043972790266626179/1134641136858841169/Hydrogen_MacOS.app.zip"
   #############################################################################################################################
 
   download_file "$current_hydrogen_exec" "hydrogen.zip" "Downloading Hydrogen..." "Hydrogen has been downloaded!" "Failed to download the latest Hydrogen version. Please check your internet connection and try again."
