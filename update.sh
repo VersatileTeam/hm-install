@@ -107,7 +107,7 @@ main() {
 
   #current_hydrogen_exec=$(fetch_url "https://raw.githubusercontent.com/VersatileTeam/hm-ver/main/durl.txt?token=$RANDOM")
   #############################################################################################################################
-  current_hydrogen_exec="https://cdn.discordapp.com/attachments/1043972790266626179/1134641136858841169/Hydrogen_MacOS.app.zip"
+  current_hydrogen_exec="https://cdn.discordapp.com/attachments/1043972790266626179/1136484057304272969/Hydrogen_MacOS.app.zip"
   #############################################################################################################################
 
   download_file "$current_hydrogen_exec" "hydrogen.zip" "Downloading Hydrogen..." "Hydrogen has been downloaded!" "Failed to download the latest Hydrogen version. Please check your internet connection and try again."
