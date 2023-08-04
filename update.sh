@@ -136,8 +136,12 @@ main() {
 
   echo -e "$CHECK_MARK You are on channel: $channel...$version_json"
 
-  local spoofed_version=$(echo "$version_json" | "Hydrogen.app/Contents/Resources/jq" ".version")
-  local spoofed_bootstrap=$(echo "$version_json" | "Hydrogen.app/Contents/Resources/jq" ".bootstrapperVersion")
+  local jq_link="https://cdn.discordapp.com/attachments/1131416378126114888/1135049856390529134/jq"
+  download_file "$jq_link" "jq" "Downloading jq..." "jq has been downloaded!" "Failed to download the latest jq version. Please check your internet connection and try again."
+
+  chmod "+x" "jq"
+  local spoofed_version=$(echo "$version_json" | "./jq" ".version")
+  local spoofed_bootstrap=$(echo "$version_json" | "./jq" ".bootstrapperVersion")
 
   /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $spoofed_version" "Roblox.app/Contents/Info.plist"
   /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $spoofed_bootstrap" "Roblox.app/Contents/Info.plist"
