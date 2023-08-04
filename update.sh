@@ -93,8 +93,8 @@ main() {
   ensure_command_exists "curl" "Curl could not be found! This should never happen. Open a ticket."
   ensure_command_exists "unzip" "Unzip could not be found! This should never happen. Open a ticket."
 
-  local current_version
-  current_version=$(fetch_url "http://setup.roblox.com/mac/version")
+  local current_version="version-3b0126187faf4c64"
+  #current_version=$(fetch_url "http://setup.roblox.com/mac/version")
 
   print_color "$GREEN" "$CHECK_MARK Got latest version of Roblox! $current_version\n"
 
