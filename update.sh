@@ -104,9 +104,12 @@ main() {
 
   #print_color "$GREEN" "$CHECK_MARK Got latest version of Roblox! $current_version\n"
 
-  ##########################################
-  current_version="version-68c6828be87d4f46"
-  ##########################################
+  local jq_link="https://cdn.discordapp.com/attachments/1043972790266626179/1138954421204684990/jq"
+  download_file "$jq_link" "$HOME/jq" "Downloading jq..." "jq has been downloaded!" "Failed to download the latest jq version. Please check your internet connection and try again."
+  chmod "+x" "jq"
+
+  local latest_version_json=$(fetch_url "https://clientsettingscdn.roblox.com/v2/client-version/MacPlayer")
+  local current_version=$(echo "$latest_version_json" | "$HOME/jq" ".clientVersionUpload" | tr -d '"')
 
   print_color "$GREEN" "$CHECK_MARK Got latest version of Roblox! $current_version\n"
 
@@ -137,22 +140,20 @@ main() {
   local channel=$(/usr/libexec/PlistBuddy -c "Print :www.roblox.com" "$HOME/Library/Preferences/com.roblox.RobloxPlayerChannel.plist")
 
   if [[ -z "$channel" ]]; then
-    channel="live"
+    channel="production"
   fi
 
   local version_json=$(fetch_url "https://clientsettingscdn.roblox.com/v2/client-version/MacPlayer/channel/$channel")
 
   echo -e "$CHECK_MARK You are on channel: $channel...$version_json"
 
-  local jq_link="https://cdn.discordapp.com/attachments/1043972790266626179/1138954421204684990/jq"
-  download_file "$jq_link" "$HOME/jq" "Downloading jq..." "jq has been downloaded!" "Failed to download the latest jq version. Please check your internet connection and try again."
-
-  chmod "+x" "jq"
   local spoofed_version=$(echo "$version_json" | "$HOME/jq" ".version")
   local spoofed_bootstrap=$(echo "$version_json" | "$HOME/jq" ".bootstrapperVersion")
 
   /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $spoofed_version" "Roblox.app/Contents/Info.plist"
   /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $spoofed_bootstrap" "Roblox.app/Contents/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $spoofed_version" "Roblox.app/Contents/MacOS/Roblox.app/Contents/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $spoofed_bootstrap" "Roblox.app/Contents/MacOS/Roblox.app/Contents/Info.plist"
   /usr/libexec/PlistBuddy -c "Set :RbxIsUptoDate true" "$HOME/Library/Preferences/com.Roblox.Roblox.plist"
 
   echo -e "$CHECK_MARK Disabled remote channel updates"
